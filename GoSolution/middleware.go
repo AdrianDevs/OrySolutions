@@ -26,8 +26,8 @@ func getSession(ctx context.Context) *ory.Session {
 	return ctx.Value("req.session").(*ory.Session)
 }
 
-func (app *App) sessionMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(writer http.ResponseWriter, request *http.Request) {
+func (app *App) sessionMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		log.Printf("Handling middleware request\n")
 
 		// Set the cookies on the ory client
@@ -64,5 +64,5 @@ func (app *App) sessionMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		log.Println("User has a valid sesion - continue to dashboard")
 		next.ServeHTTP(writer, request.WithContext(ctx))
 		return
-	}
+	})
 }

@@ -1,0 +1,30 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Header Menu</title>
+    <link rel="stylesheet" href="public/main.css">
+</head>
+
+<body>
+
+  {{template "header"}}
+
+  <!-- {{template "svgs"}} -->
+
+  
+ 
+  <div id="atf">
+      <main>
+          <svg class="icon icon-big-in">
+              <!-- <use xlink:href="#inbox"></use> -->
+              {{ IncludeHTML "static/golang.svg" }}
+          </svg>
+          <h1>Are You In?</h1>
+      </main>
+  </div>
+  
+  {{template "footer"}}
+
+</body>
+
+</html>

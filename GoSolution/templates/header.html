@@ -1,0 +1,16 @@
+{{define "header"}}
+<header>
+	<nav>
+		<button>
+			<svg class="icon icon-sm-in">
+				<!-- <use xlink:href="#inbox"></use> -->
+        {{ IncludeHTML "static/golang.svg" }}
+			</svg>
+		</button>
+		<button><a href="/">Home</a></button>
+		<button><a href="/user">User</a></button>
+		<button><a href="/admin">Admin</a></button>
+	</nav>
+	<button>Settings</button>
+</header>
+{{end}}
