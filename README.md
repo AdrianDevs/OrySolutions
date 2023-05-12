@@ -79,4 +79,12 @@ Run the project
 $ go run .
 ```
 
-## Self-Hosted
+# Self-Hosted
+
+## Components
+
+- Reverse Proxy: Oathkeeper and/or Traefik
+- Identity Service: Kratos
+- Identity Database: PostgreSQL created with kratos-migrate
+- Email server: MailHog
+- Web-App: Go Application
