@@ -79,12 +79,27 @@ Run the project
 $ go run .
 ```
 
-# Self-Hosted
+## Self-Hosted
 
-## Components
+Build docker image from dockerfile for self hosted solution
 
-- Reverse Proxy: Oathkeeper and/or Traefik
-- Identity Service: Kratos
-- Identity Database: PostgreSQL created with kratos-migrate
-- Email server: MailHog
-- Web-App: Go Application
+```sh
+$ docker build --tag docker-go-api:v1.0 -f Dockerfile.multistage .
+```
+
+Remove docker image
+
+```sh
+$ docker image rm docker-go-api:v1.0
+```
+
+Run docker image
+
+If we wanted to expose port `8080` inside the container to port `3000` outside the container, we would pass `3000:8080` to the `--publish` flag.
+
+Use the `--detach` or `-d` for short
+
+```sh
+$ docker run --detach --publish 3000:8080 docker-go-api
+```
+
