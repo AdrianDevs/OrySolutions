@@ -1,0 +1,137 @@
+- id: "api:protected"
+  upstream:
+    preserve_host: true
+    url: "http://127.0.0.1:3000"
+  match:
+    url: "http://127.0.0.1:8080/<*>"
+    methods:
+      - GET
+      - POST
+  authenticators:
+    - handler: anonymous
+  mutators:
+    - handler: noop
+  authorizer:
+    handler: allow
+
+# - id: "anonymous-web-api-access"
+#   version: v0.40.3
+#   upstream:
+#     preserve_host: true
+#     url: "http://127.0.0.1:3000"
+#   match:
+#     url: "http://127.0.0.1:8080/<*>"
+#     # url: "http://<127.0.0.1|localhost>:8080/<*>"
+#     methods:
+#     - GET
+#     - POST
+#   authenticators:
+#   - handler: anonymous
+#   authorizer:
+#     handler: allow
+#   mutators:
+#   - handler: noop
+#   errors:
+#   - handler: json
+
+# - id: "allow-anonymous-with-header-mutator"
+#   version: v0.40.3
+  # upstream:
+  #   url: "https://httpbin.org/anything/header"
+  # match:
+  #   url: "http://<127.0.0.1|localhost>:8080/anything/header"
+  #   methods:
+  #   - GET
+#   authenticators:
+#   - handler: anonymous
+#   authorizer:
+#     handler: allow
+#   mutators:
+#   - handler: header
+#     config:
+#       headers:
+#         X-User: "{{ print .Subject }}"
+
+# - id: "deny-anonymous"
+#   version: "v0.40.3"
+#   upstream:
+#     url: "https://httpbin.org/anything/deny"
+#   match:
+#     url: "http://<127.0.0.1|localhost>:8080/anything/deny"
+#     methods:
+#     - GET
+#   authenticators:
+#   - handler: anonymous
+#   authorizer:
+#     handler: deny
+#   mutators:
+#   - handler: noop
+#   errors:
+#   - handler: json
+#     config:
+#       when:
+#       - request:
+#           header:
+#             accept:
+#             - application/json
+#   - handler: redirect
+#     config:
+#       when:
+#       - request:
+#           header:
+#             accept: 
+#             - text/*
+
+# - id: "allow-anonymous-with-id-token-mutator"
+#   version: v0.40.3
+#   upstream:
+#     url: "https://httpbin.org/anything/id_token"
+#   match:
+#     url: "http://<127.0.0.1|localhost>:8080/anything/id_token"
+#     methods:
+#     - GET
+#   authenticators:
+#   - handler: anonymous
+#   authorizer:
+#     handler: allow
+#   mutators:
+#   - handler: id_token
+
+
+
+
+# - id: "api:anonymous"
+#   upstream:
+#     preserve_host: true
+#     url: "http://shorts:8090"
+#   match:
+#     url: "http://127.0.0.1:8080/u/<**>"
+#     methods:
+#       - GET
+#       - POST
+#   authenticators:
+#     - handler: anonymous
+#   mutators:
+#     - handler: noop
+#   authorizer:
+#     handler: allow
+
+# - id: "api:protected"
+#   upstream:
+#     preserve_host: true
+#     url: "http://shorts:8090"
+#   match:
+#     url: "http://127.0.0.1:8080/api/<**>"
+#     methods:
+#       - GET
+#       - POST
+#   authenticators:
+#     - handler: cookie_session
+#   mutators:
+#     - handler: header
+#   authorizer:
+#     handler: allow
+#   errors:
+#     - handler: redirect
+#       config:
+#         to: http://127.0.0.1:4455/login

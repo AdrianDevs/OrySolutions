@@ -81,25 +81,15 @@ $ go run .
 
 ## Self-Hosted
 
-Build docker image from dockerfile for self hosted solution
+Build docker image from dockerfile and run in it in a container
 
 ```sh
-$ docker build --tag docker-go-api:v1.0 -f Dockerfile.multistage .
+$ make up
 ```
 
-Remove docker image
+Stop any running containers, remove them and remove the image.
 
 ```sh
-$ docker image rm docker-go-api:v1.0
-```
-
-Run docker image
-
-If we wanted to expose port `8080` inside the container to port `3000` outside the container, we would pass `3000:8080` to the `--publish` flag.
-
-Use the `--detach` or `-d` for short
-
-```sh
-$ docker run --detach --publish 3000:8080 docker-go-api
+$ make down
 ```
 

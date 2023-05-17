@@ -38,7 +38,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "3000"
 	}
 	// Start the server
 	// http.ListenAndServe(":"+port, mux)
@@ -61,6 +61,8 @@ func (app *App) health(w http.ResponseWriter, r *http.Request) {
 	s := struct {
 		OathKeeper string
 		Traefik    string
+		Prometheus string
+		Grafana    string
 		Hydra      string
 		Kratos     string
 		Keto       string
@@ -68,8 +70,10 @@ func (app *App) health(w http.ResponseWriter, r *http.Request) {
 		WebApp     string
 		MailHog    string
 	}{
-		OathKeeper: "To do",
+		OathKeeper: "In Progress",
 		Traefik:    "To do",
+		Prometheus: "In Progress",
+		Grafana:    "In Progress",
 		Hydra:      "To do",
 		Kratos:     "To do",
 		Keto:       "To do",

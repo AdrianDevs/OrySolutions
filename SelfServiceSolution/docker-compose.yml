@@ -1,0 +1,63 @@
+version: "3.9"
+services:
+  oathkeeper:
+    image: oryd/oathkeeper:v0.40.3
+    container_name: oathkeeper
+    # depends_on:
+    #   - kratos
+    ports:
+      - 8080:4455  # run the oathkeeper proxy at port 4455
+      - 4456:4456  # run the oathkeeper api at port 4456
+    command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
+    environment:
+      - LOG_LEVEL=debug
+    restart: on-failure
+    networks:
+      - intranet
+    volumes:
+      - ./oathkeeper:/etc/config/oathkeeper
+
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   # depends_on:
+  #   #   - oathkeeper
+  #   ports:
+  #     - 9090:9090
+  #   command:
+  #     - '--config.file=/etc/config/prometheus/prometheus.yml'
+  #   environment:
+  #     - LOG_LEVEL=debug
+  #   restart: on-failure
+  #   networks:
+  #     - intranet
+  #   volumes:
+  #     - ./prometheus:/etc/config/prometheus
+  #     - prom_data:/prometheus
+
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   ports:
+  #     - 3000:3000
+  #   restart: unless-stopped
+  #   environment:
+  #     - GF_SECURITY_ADMIN_USER=admin
+  #     - GF_SECURITY_ADMIN_PASSWORD=grafana
+  #   volumes:
+  #     - ./grafana:/etc/config/grafana/provisioning/datasources
+
+  web-api:
+    container_name: web-api
+    build:
+      context: .
+    # ports:
+    #   - 3000:3000
+    networks:
+      - intranet
+
+networks:
+  intranet:
+
+# volumes:
+#   prom_data:

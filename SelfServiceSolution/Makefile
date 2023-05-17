@@ -2,61 +2,93 @@
 help: 
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-# Compile the app and package in a docker image
-.PHONY: docker-build
-docker-build:
-	docker build --tag docker-go-api -f Dockerfile.multistage .
-
-# Push the Docker Image to DockerHub
-# .PHONY: docker-build
-# docker-push:
-#	docker image push davidoram/kratos-selfservice-ui-go:latest
+# Compile app and package in a docker image
+.PHONY: docker-build-image
+docker-build-image:
+	docker build --tag $(name) -f Dockerfile .
 
 # Run the docker image
-.PHONY: docker-run -l test-api
-docker-run:
-	docker run --detach --publish 3000:8080 docker-go-api
+.PHONY: docker-run-image
+docker-run-image:
+	docker run --detach --publish 3000:8080 $(name)
+
+# List docker images
+.PHONY: docker-ls-images
+docker-ls-images:
+	@echo "LIST IMAGES"
+	docker image ls $(name)
+
+# Delete docker images
+.PHONY: docker-rm-images
+docker-rm-images:
+	docker image rm -f $(name)
 
 # List docker containers
-.PHONY: docker-ls 
-docker-ls:
-	docker ps -a -q --filter ancestor=docker-go-api --format="{{.ID}}"
+.PHONY: docker-ls-containers
+docker-ls-containers:
+	@echo "LIST CONTAINERS"
+	docker ps -a
 
-# Delete the Docker Containers
-.PHONY: docker-rm-container
-docker-rm-container:
-	docker rm $$(docker stop $$(docker ps -a -q --filter ancestor=docker-go-api --format="{{.ID}}"))
+# Delete the docker containers
+.PHONY: docker-rm-containers
+docker-rm-containers:
+	docker rm $$(docker stop $$(docker ps -a -q --filter ancestor=$(name) --format="{{.ID}}"))
 
-# Delete the Docker Images
-.PHONY: docker-rm-image
-docker-rm-image:
-	docker image rm -f docker-go-api
+# Build the docker image and run in container
+up-image: docker-build-image docker-run-image
 
-# Build and run the Docker Container
-up: docker-build docker-run
-
-# Stop and Delete the Docker Containers and Images
-.PHONY: down
-down: 
+# Stop and delete the docker containers and images
+.PHONY: down-image
+down-image: 
 # Check if there are running containers and stop them
-ifneq ($(shell docker ps -q --filter ancestor=docker-go-api --format="{{.ID}}"),)
-	@echo "Stop running containers: $(shell docker stop $$(docker ps -a -q --filter ancestor=docker-go-api --format="{{.ID}}"))"
+ifneq ($(shell docker ps -q --filter ancestor=$(name) --format="{{.ID}}"),)
+	@echo "Stop running $(name) containers: $(shell docker stop $$(docker ps -a -q --filter ancestor=$(name) --format="{{.ID}}"))"
 else
-	@echo "No running containers to stop"
+	@echo "No running $(name) containers to stop"
 endif
 # Check if there are any containers and remove them
-ifneq ($(shell docker ps -a -q --filter ancestor=docker-go-api --format="{{.ID}}"),)
-	@echo "Remove all containers: $(shell docker rm $$(docker ps -a -q --filter ancestor=docker-go-api --format="{{.ID}}"))"
+ifneq ($(shell docker ps -a -q --filter ancestor=$(name) --format="{{.ID}}"),)
+	@echo "Remove all $(name) containers: $(shell docker rm $$(docker ps -a -q --filter ancestor=$(name) --format="{{.ID}}"))"
 else
-	@echo "No containers to remove"
+	@echo "No $(name) containers to remove"
 endif
 # Check if there are any images and remove them
-ifneq ($(shell docker images -q docker-go-api),)
-	@echo "Remove all images: $(shell docker image rm -f docker-go-api)"
+ifneq ($(shell docker images -q $(name)),)
+	@echo "Remove all $(remove) images: $(shell docker image rm -f $(name))"
 else
-	@echo "No images to remove"
+	@echo "No $(name) images to remove"
+endif
+# Ask if we want to prune any dangling images
+	docker image prune
+
+# Run docker compose
+.PHONY: up
+up:
+ifdef build
+	@echo "Force build images and start docker compose"
+	docker-compose up --build --force-recreate web-api
+else
+	@echo "Start docker compose"
+	docker compose up
 endif
 
+# Stop and Delete the Docker Containers and Images
+.PHONY: remove-all-containers
+remove-all-containers:
+	@echo "Remove all containers"
+	docker compose down
+
+# Stop and Delete the Docker Containers and Images
+.PHONY: remove-web-api-image
+remove-web-api-image:
+	@echo "Remove web-api image"
+	docker image rm -f sol-web-api
+
+down-c: remove-all-containers
+down: remove-all-containers remove-web-api-image
+
+
+list: docker-ls-images docker-ls-containers
 
 
 # test:

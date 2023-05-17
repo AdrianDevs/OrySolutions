@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'oathkeeper'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    static_configs:
+      # The target needs to match what you've configured above
+      - targets: ['localhost:9000']
