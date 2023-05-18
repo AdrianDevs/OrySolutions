@@ -38,7 +38,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = "8090"
 	}
 	// Start the server
 	// http.ListenAndServe(":"+port, mux)
@@ -110,3 +110,27 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 		fs.ServeHTTP(w, r)
 	})
 }
+
+// import (
+// 	"fmt"
+// 	"log"
+// 	"net/http"
+
+// 	"github.com/davecgh/go-spew/spew"
+// )
+
+// func handle(w http.ResponseWriter, r *http.Request) {
+// 	spew.Dump(r.Header)
+// 	fmt.Fprintf(w, "Hello 👋")
+// }
+
+// func health(w http.ResponseWriter, r *http.Request) {
+// 	spew.Dump(r.Header)
+// 	fmt.Fprintf(w, "Healthy 👋")
+// }
+
+// func main() {
+// 	http.HandleFunc("/hello", handle)
+// 	http.HandleFunc("/health", health)
+// 	log.Fatal(http.ListenAndServe(":8090", nil))
+// }

@@ -25,7 +25,6 @@ serve:
 errors:
   fallback:
     - json
-
   handlers:
     json:
       enabled: true
@@ -42,7 +41,6 @@ authenticators:
     enabled: true
     config:
       subject: guest
-
   noop:
     enabled: true
 
@@ -53,8 +51,6 @@ authorizers:
 mutators:
   noop:
     enabled: true
-
-
 
 
 # log:
@@ -139,4 +135,4 @@ mutators:
 #     redirect:
 #       enabled: true
 #       config:
-#         to: https://www.ory.sh/docs
+#   

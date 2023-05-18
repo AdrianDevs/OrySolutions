@@ -44,3 +44,19 @@ COPY --from=build-stage /app/templates /templates
 USER nonroot:nonroot
 
 ENTRYPOINT ["/web-api"]
+
+
+# FROM golang:1.17-alpine
+
+# WORKDIR /build
+
+# COPY go.mod ./
+# COPY go.sum ./
+
+# RUN go mod download
+
+# COPY *.go ./
+
+# RUN GOOS=linux GOARCH=amd64 go build -o /hellos main.go
+
+# CMD ["/hellos"]
