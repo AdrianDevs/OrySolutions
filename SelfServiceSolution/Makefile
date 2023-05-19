@@ -2,6 +2,50 @@
 help: 
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+
+### Build Go Solution ###
+#########################
+.PHONY: go
+go:
+	go run .
+
+##############################################
+### Docker Compose commands ###
+
+# Run docker compose
+.PHONY: up
+up:
+ifdef build
+	@echo "Force build images and start docker compose"
+	docker-compose up --build --force-recreate web-api
+else
+	@echo "Start docker compose"
+	docker compose up
+endif
+
+# Stop docker-compose and remove images
+down: remove-all-containers remove-web-api-image
+
+# Stop docker-compose
+down-c: remove-all-containers
+
+# Stop and Delete the Docker Containers and Images
+.PHONY: remove-all-containers
+remove-all-containers:
+	@echo "Remove all containers"
+	docker compose down
+
+# Stop and Delete the Docker Containers and Images
+.PHONY: remove-web-api-image
+remove-web-api-image:
+	@echo "Remove web-api image"
+	docker image rm -f sol-web-api
+
+list: docker-ls-images docker-ls-containers
+
+##############################################
+### Docker file, image, container commands ###
+
 # Compile app and package in a docker image
 .PHONY: docker-build-image
 docker-build-image:
@@ -61,34 +105,7 @@ endif
 # Ask if we want to prune any dangling images
 	docker image prune
 
-# Run docker compose
-.PHONY: up
-up:
-ifdef build
-	@echo "Force build images and start docker compose"
-	docker-compose up --build --force-recreate web-api
-else
-	@echo "Start docker compose"
-	docker compose up
-endif
 
-# Stop and Delete the Docker Containers and Images
-.PHONY: remove-all-containers
-remove-all-containers:
-	@echo "Remove all containers"
-	docker compose down
-
-# Stop and Delete the Docker Containers and Images
-.PHONY: remove-web-api-image
-remove-web-api-image:
-	@echo "Remove web-api image"
-	docker image rm -f sol-web-api
-
-down-c: remove-all-containers
-down: remove-all-containers remove-web-api-image
-
-
-list: docker-ls-images docker-ls-containers
 
 
 # test:

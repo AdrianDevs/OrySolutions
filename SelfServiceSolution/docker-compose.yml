@@ -17,7 +17,7 @@ services:
       - intranet
     volumes:
       - ./oathkeeper:/etc/config/oathkeeper
-      
+
 # prometheus:
   #   image: prom/prometheus
   #   container_name: prometheus
@@ -53,8 +53,8 @@ services:
     container_name: web-api
     build:
       context: .
-    ports:
-      - 3000:8090
+    # ports:
+    #   - 3000:8090
     networks:
       - intranet
 

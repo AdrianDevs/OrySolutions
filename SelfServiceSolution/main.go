@@ -28,8 +28,11 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(middleware.StripSlashes)
 	r.Get("/", app.index)
 	r.Get("/health", app.health)
+	r.Get("/landing", app.landing)
+	r.Get("/private", app.private)
 
 	// Create a route along /public that will serve contents from the ./public/ folder.
 	workDir, _ := os.Getwd()
@@ -90,6 +93,24 @@ func (app *App) health(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *App) landing(w http.ResponseWriter, r *http.Request) {
+	// w.Write([]byte(fmt.Sprintf("title:%s", "Hello")))
+	err := app.tpl.ExecuteTemplate(w, "landing.html", nil)
+	if err != nil {
+		log.Fatalln("ERROR: ", nil)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (app *App) private(w http.ResponseWriter, r *http.Request) {
+	// w.Write([]byte(fmt.Sprintf("title:%s", "Hello")))
+	err := app.tpl.ExecuteTemplate(w, "private.html", nil)
+	if err != nil {
+		log.Fatalln("ERROR: ", nil)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 // FileServer sets up a http.FileServer handler to serve
 // static files from a http.FileSystem.
 func FileServer(r chi.Router, path string, root http.FileSystem) {
@@ -110,27 +131,3 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 		fs.ServeHTTP(w, r)
 	})
 }
-
-// import (
-// 	"fmt"
-// 	"log"
-// 	"net/http"
-
-// 	"github.com/davecgh/go-spew/spew"
-// )
-
-// func handle(w http.ResponseWriter, r *http.Request) {
-// 	spew.Dump(r.Header)
-// 	fmt.Fprintf(w, "Hello 👋")
-// }
-
-// func health(w http.ResponseWriter, r *http.Request) {
-// 	spew.Dump(r.Header)
-// 	fmt.Fprintf(w, "Healthy 👋")
-// }
-
-// func main() {
-// 	http.HandleFunc("/hello", handle)
-// 	http.HandleFunc("/health", health)
-// 	log.Fatal(http.ListenAndServe(":8090", nil))
-// }
