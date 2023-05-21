@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Anton');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400,900');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', 'Verdana', sans-serif;
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(to top, rgba(80, 68, 18, 0.6) 10%, transparent);
+}

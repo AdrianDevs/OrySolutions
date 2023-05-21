@@ -1,0 +1,35 @@
+version: '3'
+
+vars:
+  DEV_CONTAINERS: sol-web-api
+
+tasks:
+  go:
+    summary: Build and run the go binary standalone without the dockering it
+    desc: Build and run the go binary standalone
+    dir: go-web-api
+    cmds:
+      - go run .
+    silent: true
+  up:
+    cmds:
+      - echo 'Docker Compose Up'
+      - docker compose up
+    silent: true
+  down:
+    cmds:
+      - echo 'Docker Compose Down'
+      - docker compose down
+    silent: true
+  clean:
+    cmds:
+      - echo "Remove web-api image {{.DEV_CONTAINERS}}"
+      - docker compose down
+      - docker image rm -f {{.DEV_CONTAINERS}}
+    silent: true
+  diagrams:
+    cmds:
+      - echo "Run diagrams container"
+      - docker run --detach --publish 3010:8080 plantuml/plantuml-server:jetty
+      # - docker run --detach --publish 3000:8080 plantuml/plantuml-server:tomcat
+    silent: true

@@ -1,0 +1,38 @@
+@startuml PGP-C4-01-ContextDiagram
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/General/Users.puml
+
+!define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.4.0/material
+!include MATERIAL/email.puml
+!include MATERIAL/security.puml
+
+' look up font name here https://fontawesome.com/v5/search?q=mail&o=r
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.4.0/font-awesome-5
+!include FONTAWESOME/paw.puml
+!include FONTAWESOME/dog.puml
+!include FONTAWESOME/bone.puml
+!include FONTAWESOME/cookie.puml
+
+Person(User, "External Customers", "Pedigree GoodPoints Users", $sprite="Users")
+System(PGP, "Pedigree GoodPoints", "Loyalty Program", $sprite="paw,scale=1.5")
+System_Ext(TPG, "Points & Rewards Management", "TPG",$sprite="bone")
+System_Ext(CRM, "CRM and EDM\nService", "SalesForce", $sprite="email")
+System_Ext(Auth, "Authorisation & Authentication", "ForgeRock", $sprite="security")
+System_Ext(Shelter, "Animal Shelter Service", "Adoptme", $sprite="dog")
+System_Ext(Cookie, "Cookie\nConsent", "OneTrust", $sprite="cookie")
+
+
+Rel(User, PGP, "Engages with GoodPoints", "HTTPS")
+Rel(User, TPG, "Upload Receipts\nView Points\nView Rewards\nRedeem Rewards", "HTTPS")
+Rel_R(PGP, TPG, "Redirect &\nView & Add Points", "HTTPS")
+Rel_L(PGP, CRM, "Send Emails &\nUpdate CRM", "HTTPS")
+Rel_U(CRM, User, "Sends\nEmails")
+BiRel(PGP, Auth, "Verify\nUsers", "HTTPS")
+Rel(PGP, Shelter, "Get Animal &\nShelter Info", "HTTPS")
+Rel(PGP, Cookie, "Cookie consent &\n management", "HTTPS")
+
+@enduml

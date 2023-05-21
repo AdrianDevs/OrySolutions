@@ -53,6 +53,7 @@ services:
     container_name: web-api
     build:
       context: .
+      dockerfile: go-web-api-dockerfile
     # ports:
     #   - 3000:8090
     networks:

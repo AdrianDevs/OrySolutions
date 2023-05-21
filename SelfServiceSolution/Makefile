@@ -39,7 +39,7 @@ remove-all-containers:
 .PHONY: remove-web-api-image
 remove-web-api-image:
 	@echo "Remove web-api image"
-	docker image rm -f sol-web-api
+	docker image rm -f
 
 list: docker-ls-images docker-ls-containers
 
