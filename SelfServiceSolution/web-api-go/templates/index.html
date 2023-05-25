@@ -1,0 +1,22 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="public/main.css">
+    <title>Ory Time</title>
+</head>
+
+<body>
+  <main>
+    <h1>{{ .pageHeading }}</h1>
+    <h2>Are You In?</h2>
+    <h2><a href="/private">Let see</a> </h2>
+    <h3>Session info</h3>
+    {{ if .kratosSession }}
+        <h4>{{ .kratosSession }}</h4>
+    {{ else }}
+    <h4>No session info</h4>
+    {{ end }}
+  </main>
+</body>
+
+</html>

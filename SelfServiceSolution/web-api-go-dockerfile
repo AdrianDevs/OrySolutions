@@ -7,17 +7,17 @@ FROM golang:1.20 AS build-stage
 WORKDIR /app
 
 # Download Go modules
-COPY go-web-api/go.mod go-web-api/go.sum ./
+COPY web-api-go/go.mod web-api-go/go.sum ./
 RUN go mod download
 
 # Copy the source code. Note the slash at the end, as explained in
 # https://docs.docker.com/engine/reference/builder/#copy
-COPY go-web-api/*.go ./
-COPY go-web-api/public ./public
-COPY go-web-api/templates ./templates
+COPY web-api-go/*.go ./
+COPY web-api-go/public ./public
+COPY web-api-go/templates ./templates
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /web-api
+RUN CGO_ENABLED=0 GOOS=linux go build -o /web-api-go
 
 # Run the tests in the container
 # FROM build-stage AS run-test-stage
@@ -28,7 +28,7 @@ FROM gcr.io/distroless/base-debian11 AS build-release-stage
 
 WORKDIR /
 
-COPY --from=build-stage /web-api /web-api
+COPY --from=build-stage /web-api-go /web-api-go
 COPY --from=build-stage /app/public /public
 COPY --from=build-stage /app/templates /templates
 
@@ -43,4 +43,4 @@ COPY --from=build-stage /app/templates /templates
 
 USER nonroot:nonroot
 
-ENTRYPOINT ["/web-api"]
+ENTRYPOINT ["/web-api-go"]

@@ -1,13 +1,13 @@
 version: '3'
 
 vars:
-  DEV_CONTAINERS: sol-web-api
+  DEV_CONTAINERS: sol-web-api-go
 
 tasks:
   go:
     summary: Build and run the go binary standalone without the dockering it
     desc: Build and run the go binary standalone
-    dir: go-web-api
+    dir: web-api-go
     cmds:
       - go run .
     silent: true
@@ -23,7 +23,7 @@ tasks:
     silent: true
   clean:
     cmds:
-      - echo "Remove web-api image {{.DEV_CONTAINERS}}"
+      - echo "Remove image {{.DEV_CONTAINERS}}"
       - docker compose down
       - docker image rm -f {{.DEV_CONTAINERS}}
     silent: true

@@ -1,8 +1,5 @@
 version: '3'
 
-vars:
-  DEV_CONTAINERS: sol-web-api
-
 tasks:
   go:
     summary: Build and run the go binary standalone without the dockering it
@@ -20,30 +17,30 @@ tasks:
     dir: ../
     cmds:
       - echo 'Compile app and package in a docker image'
-      - docker build --tag go-web-api -f go-web-api-dockerfile .
+      - docker build --tag web-api-go -f web-api-go-dockerfile .
     silent: true
   start:
     desc: Run the docker image in a container
     cmds:
       - echo 'Run the docker image in a container'
-      - docker run --detach --publish 3000:8090 go-web-api
+      - docker run --detach --publish 3000:8090 web-api-go
     silent: true
   stop:
     desc: Stop the container
     cmds:
       - echo 'Stop the container'
-      - docker stop $(docker ps -a -q --filter ancestor=go-web-api --format="{{.ID}}")
+      - docker stop $(docker ps -a -q --filter ancestor=web-api-go --format="{{.ID}}")
     silent: true
   clean:
-    desc: Stop the container and remove Docker Go-Web-API Images
+    desc: Stop the container and remove Docker Web-API-Go Images
     cmds:
-      - echo "Stop the container and remove Docker Go-Web-API Images"
+      - echo "Stop the container and remove Docker Web-API-Go Images"
       - defer: { task:  clean-images }
-      - docker stop $(docker ps -a -q --filter ancestor=go-web-api --format="{{.ID}}")
-      - docker rm $(docker ps -a -q --filter ancestor=go-web-api --format="{{.ID}}")
+      - docker stop $(docker ps -a -q --filter ancestor=web-api-go --format="{{.ID}}")
+      - docker rm $(docker ps -a -q --filter ancestor=web-api-go --format="{{.ID}}")
     silent: true
   clean-images:
     cmds:
-      - docker image rm -f go-web-api
+      - docker image rm -f web-api-go
       # - docker image prune
     silent: true

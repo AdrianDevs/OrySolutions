@@ -1,7 +1,7 @@
 - id: "api:public"
   upstream:
     preserve_host: true
-    url: http://web-api:8090
+    url: http://web-api-go:8090
   match:
     url: http://<127.0.0.1|localhost>:8080/<(?!private).*>
     methods:
@@ -17,7 +17,7 @@
 - id: "api:protected"
   upstream:
     preserve_host: true
-    url: http://web-api:8090
+    url: http://web-api-go:8090
   match:
     url: http://<127.0.0.1|localhost>:8080/<private|private/.*>
     methods:
@@ -44,4 +44,3 @@
           header:
             accept:
             - text/*
-            

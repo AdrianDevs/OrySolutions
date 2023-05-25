@@ -4,7 +4,8 @@ log:
 
 serve:
   proxy:
-    cors:
+    port: 4455 # run the proxy at port 4455
+    cors:  # TODO find out why we need this
       enabled: true
       allowed_origins:
         - http://127.0.0.1:3001
@@ -21,6 +22,8 @@ serve:
         - Content-Type
       allow_credentials: true
       debug: true
+  api:
+    port: 4456 # run the api at port 4456
 
 errors:
   fallback:
